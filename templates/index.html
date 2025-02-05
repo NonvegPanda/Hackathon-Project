@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Todo List</h1>
+    <h2>Points: {{ score }}</h2>
+
+    <form method="POST" action="{{ url_for('add_task') }}">
+        <label for="newTask">Add Task:</label>
+        <input type="text" id="newTask" name="newTask" required>
+        <button type="submit">Add</button>
+    </form>
+
+    
+    <form method="POST" action="{{ url_for('complete_tasks') }}">
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <input type="checkbox" id="{{ loop.index }}" name="taskCheckbox" value="{{ loop.index }}">
+                    <label for="{{ loop.index }}">{{ task }}</label>
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit">Complete Selected Tasks</button>
+    </form>
+</body>
+</html>
