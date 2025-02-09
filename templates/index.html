@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My To-Do List App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>MIndscapes</title>
 </head>
 <body>
+    <h1>Mindscapes</h1>
+    <h2>Nerves: {{ score }}</h2>
 
-    <h1>Todo List</h1>
-    <h2>Points: {{ score }}</h2>
-
+    <h1>This is a fun learning app where you complete tasks to earn Nerves. Nerves can be used in the Text based game to powerup yourself </h1>
+    
     <form method="POST" action="{{ url_for('add_task') }}">
         <label for="newTask">Add Task:</label>
         <input type="text" id="newTask" name="newTask" required>
         <button type="submit">Add</button>
     </form>
 
-    
     <form method="POST" action="{{ url_for('complete_tasks') }}">
         <ul>
             {% for task in tasks %}
                 <li>
-                    <input type="checkbox" id="{{ loop.index }}" name="taskCheckbox" value="{{ loop.index }}">
-                    <label for="{{ loop.index }}">{{ task }}</label>
+                    <input type="checkbox" id="task{{ loop.index }}" name="taskCheckbox" value="{{ loop.index }}">
+                    <label for="task{{ loop.index }}">{{ task }}</label>
                 </li>
             {% endfor %}
         </ul>
         <button type="submit">Complete Selected Tasks</button>
     </form>
+    
+    <h2>Adventure Game</h2>
+    <p>Click below to play.</p>
+    <a href="{{ url_for('game') }}"><button>Play Game</button></a>
 </body>
 </html>
