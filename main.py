@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import google.generativeai as genai
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Required for session management
-
+app.secret_key = "your_secret_key" 
 genai.configure(api_key="AIzaSyC-PJMrcaRgwL_bxSX7FkREzJu5kcVqlEg")
 
 tasks = ['Buy groceries', 'Complete coding tutorial', 'Walk the dog']
@@ -21,16 +20,13 @@ def add_task():
     return redirect(url_for('index'))
 
 @app.route('/complete', methods=['POST'])
-def complete_tasks():
+def complete():
+    global score  
     completed_tasks = request.form.getlist('taskCheckbox')
-    score = session.get('score', 0)
     
-    for index in map(int, completed_tasks):
-        if 1 <= index <= len(tasks) and "Completed" not in tasks[index - 1]:
-            tasks[index - 1] += " - Completed"
-            score += 1  # Increment score for each completed task
-    
-    session['score'] = score  # Save score in session
+    for i in completed_tasks:
+        tasks[int(i)-1] += " - Completed"
+        score += 1
     return redirect(url_for('index'))
 
 @app.route('/game', methods=['GET', 'POST'])
@@ -43,7 +39,7 @@ def game():
         choice = request.form.get('choice', '')
         prompt = f"Continue the adventure based on this choice: {choice}"
     else:
-        prompt = "Start a new text-based adventure game. The game must be some what fanatasized describe the avaatar of the person build the person as a weak person first  Describe the scenario and give 2-3 choices."
+        prompt = "Start a new text-based adventure game. The game must be some what fanatasized describe the avaatar of the person build the person as a weak person first  Describe the scenario and give 2-3 choices.Please make the scenarios shorter."
     
     response = chat_session.send_message(prompt)
     text = response.text
@@ -51,7 +47,4 @@ def game():
     return render_template('game.html', text=text, score=score)
 
 if __name__ == '__main__':
-    
-    
-    
     app.run(debug=True)

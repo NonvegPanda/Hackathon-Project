@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MInndsapes Game</title>
+    <title>MIndsapes Game</title>
 </head>
 <body>
     <h1>Mindscapes</h1>
     <h2>Nerves: {{ score }}</h2>
+
+    <form method="POST" action="{{ url_for('game') }}">
+        <label for="character">Describe Your character:</label>
+        <input type="text" id="character" name="character" required>
+        <button type="submit">Continue</button>
+    </form>
     
     <p>{{ text }}</p>
     
