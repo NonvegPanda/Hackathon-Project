@@ -3,33 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIndscapes</title>
+    <title>Mindscapes</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+        
+        /* General Page Styling */
+        body {
+            font-family: "Lato", sans-serif;
+            color: #DCD7C9;
+            background-color: #202a23;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Title Styling */
+        h1.title {
+            font-weight: 900;
+            font-size: 50px;
+            padding-top: 50px;
+            color: #FFD700;
+        }
+
+        /* Score Section */
+        .score {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 20px;
+            background-color: #A27B5C;
+            padding: 10px 20px;
+            border-radius: 10px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Task List Styling */
+        .tasks {
+            background-color: #A27B5C;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: left;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        /* Buttons */
+        button {
+            background-color: #FFD700;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #E6C200;
+        }
+
+        /* Shop Section */
+        .shop {
+            margin-top: 30px;
+        }
+
+        .inventory, .shop-items {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .inventory li, .shop-items li {
+            padding: 5px;
+        }
+
+        .shop button {
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Mindscapes</h1>
-    <h2>Nerves: {{ score }}</h2>
+    <h1 class="title">Mindscapes</h1>
 
-    <h1>This is a fun learning app where you complete tasks to earn Nerves. Nerves can be used in the Text based game to powerup yourself </h1>
+    <h3>This is a fun learning app where you complete tasks to earn Nerves.</h3>
+    <h3>Nerves can be used in the Text-based game to power up yourself.</h3>
     
+    <h2>Your Nerves: 
+        <img src="{{ url_for('static', filename='nerves.png') }}" alt="Nerves" width="30px" height="30px">
+        {{ score }}
+    </h2>
+    <br><br>
+
+    <hr>
+
     <form method="POST" action="{{ url_for('add_task') }}">
-        <label for="newTask">Add Task:</label>
-        <input type="text" id="newTask" name="newTask" required>
-        <button type="submit">Add</button>
+        <label for="newTask" class="label-1">Add Task:</label><br><br>
+        <input type="text" id="newTask" name="newTask" required><br><br>
+        <button type="submit">Add Task</button>
     </form>
 
-    <form method="POST" action="{{ url_for('complete_tasks') }}">
-        <ul>
-            {% for task in tasks %}
+    <br>
+
+    <div class="tasks">
+        <form method="POST" action="{{ url_for('complete') }}">
+            <ul>
+                {% for task in tasks %}
+                    <li>
+                        <input type="checkbox" id="task{{ loop.index }}" name="taskCheckbox" value="{{ loop.index }}">
+                        <label for="task{{ loop.index }}">{{ task }}</label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit">Complete Selected Tasks</button>
+        </form>
+    </div>
+
+    <div class="shop">
+        <h2>Shop</h2>
+        <h3>Spend your Nerves to buy items that boost your character's strength!</h3>
+        <h4>Your Inventory:</h4>
+        <ul class="inventory">
+            {% for item in inventory %}
+                <li>{{ item }} - <strong>Owned</strong></li>
+            {% endfor %}
+        </ul>
+        <h4>Items Available for Purchase:</h4>
+        <ul class="shop-items">
+            {% for item, details in shop_items.items() %}
                 <li>
-                    <input type="checkbox" id="task{{ loop.index }}" name="taskCheckbox" value="{{ loop.index }}">
-                    <label for="task{{ loop.index }}">{{ task }}</label>
+                    {{ item }} - Cost: {{ details['cost'] }} Nerves
+                    {% if item in inventory %}
+                        <strong>Already Bought</strong>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('buy_item') }}">
+                            <input type="hidden" name="item_name" value="{{ item }}">
+                            <button type="submit">Buy</button>
+                        </form>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
-        <button type="submit">Complete Selected Tasks</button>
-    </form>
-    + 
-    
+    </div>
+
     <h2>Adventure Game</h2>
     <p>Click below to play.</p>
     <a href="{{ url_for('game') }}"><button>Play Game</button></a>
