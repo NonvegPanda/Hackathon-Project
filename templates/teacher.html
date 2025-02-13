@@ -2,34 +2,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Mindscapes</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+        
+       
+        body {
+            font-family: "Lato", sans-serif;
+            color: #DCD7C9;
+            background-color: #202a23;
+            text-align: center;
+            margin: 0;
+        }
+
+       
+        h1.title {
+            font-weight: 900;
+            font-size: 50px;
+            padding-top: 50px;
+            color: #FFD700;
+        }
+
+        
+
+        
+        .tasks {
+            background-color: #A27B5C;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: left;
+            width: 50%;
+            margin-top: 20px;
+        }
+
+        /* Buttons */
+        button {
+            background-color: #FFD700;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #E6C200;
+        }
+
+    </style>
+    <script>
+        $.ajax({
+            type: 'GET',
+            url: '/get_score',
+            success: function(data) {
+                var score = data.score;
+                document.getElementById('score').innerHTML = 'Score: ' + score;
+            }
+        });
+    </script>
 </head>
 <body>
-    <h1>Teacher Dashboard</h1>
-    <form method="POST" action="{{ url_for('teacher') }}">
-        <label>Add New Task:</label>
-        <input type="text" name="newTask" required>
+    <h1 class="title">Mindscapes</h1>
+
+    <h3>Here You can Add Tasks For Students And Check Them To give Them Points</h3>
+    <h3>And Check Them To give Them Points</h3>
+
+    <h2 id="score">Your Student's Nerves: 
+        <img  src="{{ url_for('static', filename='nerves.png') }}" alt="Nerves" width="30px" height="30px">
+        {{ score }}
+    </h2>
+    
+
+    <hr>
+
+    <form method="POST" action="{{ url_for('add_task') }}">
+        <label for="newTask" class="label-1">Add Task:</label><br><br>
+        <input type="text" id="newTask" name="newTask" required><br><br>
         <button type="submit">Add Task</button>
     </form>
-    <h3>Tasks</h3>
-    <ul>
-        {% for task in tasks %}
-            <li>{{ task }}</li>
-        {% endfor %}
-    </ul>
-    <h3>Student Submissions</h3>
-    <ul>
-        {% for filename, details in submissions.items() %}
-            <li>
-                <a href="/{{ details['filepath'] }}">{{ filename }}</a>
-                {% if not details['checked'] %}
-                    <a href="{{ url_for('review_task', filename=filename) }}"><button>Approve</button></a>
-                {% else %}
-                    <strong>Checked</strong>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+
+    <br>
+
+    <div class="tasks">
+        <form method="POST" action="{{ url_for('complete') }}">
+            <ul>
+                {% for task in tasks %}
+                    <li>
+                        <input type="checkbox" id="task{{ loop.index }}" name="taskCheckbox" value="{{ loop.index }}">
+                        <label for="task{{ loop.index }}">{{ task }}</label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit">Complete Selected Tasks</button>
+        </form>
+    </div>
+
+    
+
+
 </body>
 </html>

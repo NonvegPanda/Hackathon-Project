@@ -1,13 +1,71 @@
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mindscapes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+        
+       
+        body {
+            font-family: "Lato", sans-serif;
+            color: #DCD7C9;
+            background-color: #202a23;
+            text-align: center;
+            margin: 0;
+        }
+
+       
+        h1.title {
+            font-weight: 900;
+            font-size: 50px;
+            padding-top: 50px;
+            color: #FFD700;
+        }
+
+       
+      
+
+        button {
+            background-color: #FFD700;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #E6C200;
+        }
+
+      
+       
+    </style>
 </head>
 <body>
-    <h1>Welcome to Mindscapes</h1>
-    <a href="{{ url_for('student') }}"><button>Student Portal</button></a>
-    <a href="{{ url_for('teacher') }}"><button>Teacher Portal</button></a>
+    <h1 class="title">Mindscapes</h1>
+
+    <h3>This is a fun learning app where you complete tasks to earn Nerves.</h3>
+    <h3>Nerves can be used in the Text-based game to power up yourself.</h3>
+    
+   
+    
+
+    
+
+    <br>
+
+
+
+  
+
+  
+    <a href="{{ url_for('teacher') }}"><button>Teacher</button></a>
+    <a href="{{ url_for('index') }}"><button>Student</button></a>
 </body>
 </html>

@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mindscapes</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        $.ajax({
+            type: 'GET',
+            url: '/get_score',
+            success: function(data) {
+                var score = data.score;
+                document.getElementById('score').innerHTML = 'Your Score: ' + score;
+            }
+        });
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
         
@@ -90,10 +100,10 @@
 <body>
     <h1 class="title">Mindscapes</h1>
 
-    <h3>This is a fun learning app where you complete tasks to earn Nerves.</h3>
+    <h3>Here you will find your shop and tasks.You can see your score and the teachers will give you points according to it</h3>
     <h3>Nerves can be used in the Text-based game to power up yourself.</h3>
     
-    <h2>Your Nerves: 
+    <h2 id="score">Your Nerves: 
         <img src="{{ url_for('static', filename='nerves.png') }}" alt="Nerves" width="30px" height="30px">
         {{ score }}
     </h2>
@@ -101,26 +111,21 @@
 
     <hr>
 
-    <form method="POST" action="{{ url_for('add_task') }}">
-        <label for="newTask" class="label-1">Add Task:</label><br><br>
-        <input type="text" id="newTask" name="newTask" required><br><br>
-        <button type="submit">Add Task</button>
-    </form>
 
-    <br>
+
 
     <div class="tasks">
-        <form method="POST" action="{{ url_for('complete') }}">
-            <ul>
-                {% for task in tasks %}
-                    <li>
-                        <input type="checkbox" id="task{{ loop.index }}" name="taskCheckbox" value="{{ loop.index }}">
-                        <label for="task{{ loop.index }}">{{ task }}</label>
-                    </li>
-                {% endfor %}
-            </ul>
-            <button type="submit">Complete Selected Tasks</button>
-        </form>
+        
+        <ul>
+            {% for task in tasks %}
+                <li>
+    
+                    <label for="task{{ loop.index }}">{{ task }}</label>
+                </li>
+            {% endfor %}
+        </ul>
+            
+
     </div>
 
     <div class="shop">

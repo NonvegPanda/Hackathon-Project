@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask.json import jsonify
+
 import google.generativeai as genai
 
 app = Flask(__name__)
@@ -18,21 +20,33 @@ def index():
     inventory = session.get('inventory', [])
     return render_template('index.html', tasks=tasks, score=score, inventory=inventory, shop_items=shop_items)
 
+@app.route('/home')
+def home():
+    score = session.get('score', 0)
+    return render_template('home.html',score=score)
+
+
+
 @app.route('/teacher')
 def teacher():
-    return render_template('teacher.html', tasks=tasks)
-
-@app.route('/student')
-def student():
     score = session.get('score', 0)
-    return render_template('student.html', tasks=tasks, score=score)
+    if 'score' in session:
+        session['score'] = score
+    else:
+        session['score'] = 0
+    print(score)
+    return render_template('teacher.html', tasks=tasks, score=score)
+   
+    
+
+
 
 @app.route('/add', methods=['POST'])
 def add_task():
     new_task = request.form.get('newTask')
     if new_task:
         tasks.append(new_task)
-    return redirect(url_for('index'))
+    return redirect(url_for('teacher'))
 
 @app.route('/complete', methods=['POST'])
 def complete():
@@ -41,10 +55,15 @@ def complete():
     completed_tasks = request.form.getlist('taskCheckbox')
     
     for i in completed_tasks:
-        tasks[int(i)-1] += " - Completed"
-        score += 1
-    session['score'] = score  # Store the updated score in session
-    return redirect(url_for('index'))
+        if int(i) - 1 < len(tasks):
+            tasks[int(i)-1] += " - Completed"
+            session['score'] += 1
+    return redirect(url_for('teacher'))
+
+@app.route('/get_score')
+def get_score():
+    score = session.get('score')
+    return jsonify({'score': score})
 
 @app.route('/buy_item', methods=['POST'])
 def buy_item():
