@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import google.generativeai as genai
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Make sure to set a secret key for session handling
+app.secret_key = "8080"  
 genai.configure(api_key="AIzaSyC-PJMrcaRgwL_bxSX7FkREzJu5kcVqlEg")
 
 tasks = ['Buy groceries', 'Complete coding tutorial', 'Walk the dog']
@@ -17,6 +17,15 @@ def index():
     score = session.get('score', 0)
     inventory = session.get('inventory', [])
     return render_template('index.html', tasks=tasks, score=score, inventory=inventory, shop_items=shop_items)
+
+@app.route('/teacher')
+def teacher():
+    return render_template('teacher.html', tasks=tasks)
+
+@app.route('/student')
+def student():
+    score = session.get('score', 0)
+    return render_template('student.html', tasks=tasks, score=score)
 
 @app.route('/add', methods=['POST'])
 def add_task():
@@ -91,9 +100,9 @@ def game():
 
     if request.method == 'POST':
         choice = request.form.get('choice', '')
-        prompt = f"{character_description} Continue the adventure based on this choice: {choice}. Make the story short and reflect the character's growth based on their achievements. Don't mention the score directly, but let their actions and items shape the story."
+        prompt = f"{character_description} Continue the adventure based on this choice: {choice}. Make the story short and reflect the character's growth based on their achievements. Don't mention the score directly, but let their actions and items shape the story. GIve 4 options always and list the options again at the last line"
     else:
-        prompt = f"{character_description} The character embarks on their journey, facing challenges ahead. What will they do next? Provide 2-3 choices for them to choose from."
+        prompt = f"{character_description} The character embarks on their journey, facing challenges ahead. What will they do next? GIve 4 options always and list the options again at the last "
 
     response = chat_session.send_message(prompt)
     text = response.text
@@ -103,3 +112,5 @@ def game():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+    

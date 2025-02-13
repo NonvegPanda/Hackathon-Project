@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Teacher Dashboard</h1>
+    <form method="POST" action="{{ url_for('teacher') }}">
+        <label>Add New Task:</label>
+        <input type="text" name="newTask" required>
+        <button type="submit">Add Task</button>
+    </form>
+    <h3>Tasks</h3>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task }}</li>
+        {% endfor %}
+    </ul>
+    <h3>Student Submissions</h3>
+    <ul>
+        {% for filename, details in submissions.items() %}
+            <li>
+                <a href="/{{ details['filepath'] }}">{{ filename }}</a>
+                {% if not details['checked'] %}
+                    <a href="{{ url_for('review_task', filename=filename) }}"><button>Approve</button></a>
+                {% else %}
+                    <strong>Checked</strong>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

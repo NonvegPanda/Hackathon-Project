@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindscapes Game</title>
+
+<html>
+<title>Mindscapes Game</title>
     <link rel="stylesheet" href="style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
@@ -61,7 +58,7 @@
 
        
         button {
-            background-color: #FFD700; /* Gold color */
+            background-color: #FFD700;
             border: none;
             padding: 10px 20px;
             font-size: 18px;
@@ -113,7 +110,7 @@
         
         <form method="POST" action="{{ url_for('game') }}">
             <label for="choice">Your Choice:</label>
-            <input type="text" id="choice" name="choice" required>
+            <input type="text" id="choice" name="choice" required autocomplete="off">
             <button type="submit">Continue</button>
         </form>
     </div>
