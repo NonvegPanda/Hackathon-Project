@@ -1,41 +1,27 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindscapes</title>
+    <title>Mindscapes Game</title>
     <link rel="stylesheet" href="style.css">
-    <script>
-        $.ajax({
-            type: 'GET',
-            url: '/get_score',
-            success: function(data) {
-                var score = data.score;
-                document.getElementById('score').innerHTML = 'Your Score: ' + score;
-            }
-        });
-    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-        
-       
+        /* General Styling */
         body {
             font-family: "Lato", sans-serif;
             color: #DCD7C9;
             background-color: #202a23;
             text-align: center;
-            margin: 0;
         }
 
-       
-        h1.title {
+        .title {
             font-weight: 900;
             font-size: 50px;
+            text-align: center;
             padding-top: 50px;
             color: #FFD700;
         }
 
-        /* Score Section */
         .score {
             display: flex;
             justify-content: center;
@@ -44,25 +30,30 @@
             font-weight: bold;
             margin-top: 20px;
             background-color: #A27B5C;
-            padding: 10px 20px;
             border-radius: 10px;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
         }
 
-        
-        .tasks {
+        form {
             background-color: #A27B5C;
-            padding: 10px;
+            padding: 20px;
             border-radius: 10px;
-            display: inline-block;
-            text-align: left;
+            margin: 20px auto;
             width: 50%;
-            margin-top: 20px;
+            text-align: left;
         }
 
-        /* Buttons */
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
         button {
             background-color: #FFD700;
             border: none;
@@ -70,7 +61,6 @@
             font-size: 18px;
             font-weight: bold;
             border-radius: 5px;
-            cursor: pointer;
             transition: background-color 0.3s;
         }
 
@@ -78,56 +68,146 @@
             background-color: #E6C200;
         }
 
-      
-        .shop {
+        .game {
             margin-top: 30px;
         }
 
-        .inventory, .shop-items {
+        .response {
+            background-color: #2E3B2B;
+            color: #DCD7C9;
+            border-left: 5px solid #FFD700;
+            padding: 15px 20px;
+            margin: 20px auto;
+            width: 50%;
+            font-size: 18px;
+            font-weight: 400;
+            text-align: left;
+        }
+
+        /* Shop and Inventory Styling */
+        .shop {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #2E3B2B;
+            border-radius: 10px;
+            width: 60%;
+            margin: 20px auto;
+        }
+
+        .shop h2, .shop h3 {
+            color: #FFD700;
+        }
+
+        .inventory {
+            list-style-type: none;
+            padding-left: 0;
+            color: #DCD7C9;
+        }
+
+        .inventory li {
+            background-color: #A27B5C;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .shop-items {
+            list-style-type: none;
+            padding-left: 0;
             margin-top: 20px;
-            font-size: 20px;
         }
 
-        .inventory li, .shop-items li {
-            padding: 5px;
+        .shop-items li {
+            background-color: #A27B5C;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .shop button {
-            margin-top: 5px;
+        .shop-items button {
+            background-color: #FFD700;
+            border: none;
+            padding: 5px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
+
+        .shop-items button:hover {
+            background-color: #E6C200;
+        }
+
+        /* Task Section Styling */
+        .task-section {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #2E3B2B;
+            border-radius: 10px;
+            width: 60%;
+            margin: 20px auto;
+        }
+
+        .task-section h2 {
+            color: #FFD700;
+        }
+
+        .task-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .task-list li {
+            background-color: #A27B5C;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-list button {
+            background-color: #FFD700;
+            border: none;
+            padding: 5px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .task-list button:hover {
+            background-color: #E6C200;
+        }
+
     </style>
 </head>
 <body>
     <h1 class="title">Mindscapes</h1>
-
-    <h3>Here you will find your shop and tasks.You can see your score and the teachers will give you points according to it</h3>
-    <h3>Nerves can be used in the Text-based game to power up yourself.</h3>
-    
-    <h2 id="score">Your Nerves: 
+    <h2>Your Nerves: 
         <img src="{{ url_for('static', filename='nerves.png') }}" alt="Nerves" width="30px" height="30px">
         {{ score }}
     </h2>
-    <br><br>
 
-    <hr>
+        <!-- Task List Section -->
+        <div class="task-section">
+            <h2>Task List</h2>
+            <ul class="task-list">
+                {% for task in tasks %}
+                    <li>
+                        {{ task }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-
-
-
-    <div class="tasks">
-        
-        <ul>
-            {% for task in tasks %}
-                <li>
-    
-                    <label for="task{{ loop.index }}">{{ task }}</label>
-                </li>
-            {% endfor %}
-        </ul>
-            
-
-    </div>
-
+    <!-- Shop Section -->
     <div class="shop">
         <h2>Shop</h2>
         <h3>Spend your Nerves to buy items that boost your character's strength!</h3>
@@ -155,8 +235,8 @@
         </ul>
     </div>
 
-    <h2>Adventure Game</h2>
-    <p>Click below to play.</p>
-    <a href="{{ url_for('game') }}"><button>Play Game</button></a>
+
+
+    <a href="{{ url_for('index') }}"><button>Back to To-Do List</button></a>
 </body>
 </html>
